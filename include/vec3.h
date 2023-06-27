@@ -3,8 +3,22 @@
 
 #include<cmath>
 #include<iostream>
+#include<random>
 
 using std::sqrt;
+
+// utils
+inline float random_float() {
+    // returns a random float in [0, 1)
+    static std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+    static std::mt19937 gen;
+    return dist(gen);
+}
+
+inline float random_float(float min, float max) {
+    // returns a random float in [min, max)
+    return min + (max - min) * random_float();
+}
 
 // class
 class vec3 {
@@ -47,6 +61,14 @@ public:
     }
     float length_squared() const {
         return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
+    }
+
+    inline static vec3 random() {
+        return vec3(random_float(), random_float(), random_float());
+    }
+
+    inline static vec3 random(float min, float max) {
+        return vec3(random_float(min, max), random_float(min, max), random_float(min, max));
     }
 };
 
