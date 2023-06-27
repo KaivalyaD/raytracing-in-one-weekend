@@ -22,7 +22,7 @@ color3 ray_color(const ray& r, const hittable_list& world, int depth) {
     if(depth <= 0)
         return color3(0.0f, 0.0f, 0.0f);
 
-    if(world.hit(r, 0.0f, infinity, rec)) {
+    if(world.hit(r, 0.001f, infinity, rec)) {
         point3 target = rec.p + rec.normal + random_in_unit_sphere();
         ray reflected = ray(rec.p, target - rec.p);
         return 0.5f * ray_color(reflected, world, depth - 1);
@@ -44,7 +44,7 @@ int main(void) {
 
     // world
     hittable_list world;
-    world.add(make_shared<sphere>(point3(0.0f, -50.5f, -1.0f), 50.0f));
+    world.add(make_shared<sphere>(point3(0.0f, -100.5f, -1.0f), 100.0f));
     world.add(make_shared<sphere>(point3(0.0f, 0.0f, -1.0f), 0.5f));
 
     // camera
