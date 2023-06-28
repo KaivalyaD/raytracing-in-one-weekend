@@ -126,6 +126,13 @@ vec3 reflect(const vec3& v, const vec3& n) {
     return v - 2 * dot(v, n) * n;
 }
 
+vec3 refract(const vec3& v, const vec3& n, float ni_over_nr) {
+    auto cos_theta = fmin(dot(-v, n), 1.0f);
+    vec3 r_perpendicular = ni_over_nr * (v + cos_theta * n);
+    vec3 r_parallel = -sqrt(fabs(1.0f - r_perpendicular.length_squared())) * n;
+    return r_perpendicular + r_parallel;
+}
+
 // type aliases for vec3
 using point3 = vec3;  // 3D points
 using color3 = vec3;   // RGB colors

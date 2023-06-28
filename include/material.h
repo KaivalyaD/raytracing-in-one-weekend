@@ -66,4 +66,23 @@ public:
     }
 };
 
+class dielectric: public material {
+private:
+    float ri;
+
+public:
+    dielectric(float absolute_refractive_index) : ri(absolute_refractive_index) {}
+
+    virtual bool scatter(const ray& r_incident, const hit_record& rec, color3& attenuation, ray& r_scattered) const override{
+        attenuation = color3(1.0f, 1.0f, 1.0f);
+        float refraction_ratio = rec.front_face ? (1.0f / ri) : ri;
+
+        vec3 unit_direction = unit_vector(r_incident.direction());
+        vec3 refracted = refract(unit_direction, rec.normal, refraction_ratio);
+
+        r_scattered = ray(rec.p, refracted);
+        return true;
+    }
+};
+
 #endif  // MATERIAL_H
