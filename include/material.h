@@ -39,4 +39,19 @@ public:
     }
 };
 
+class metal: public material {
+private:
+    color3 albedo;
+
+public:
+    metal(const color3& a) : albedo(a) {}
+
+    virtual bool scatter(const ray& r_incident, const hit_record& rec, color3& attenuation, ray& r_scattered) const override{
+        vec3 reflected = reflect(unit_vector(r_incident.direction()), rec.normal);
+        r_scattered = ray(rec.p, reflected);
+        attenuation = albedo;
+        return dot(r_scattered.direction(), rec.normal) > 0.0f;
+    }
+};
+
 #endif  // MATERIAL_H

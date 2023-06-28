@@ -121,6 +121,11 @@ inline vec3 unit_vector(vec3 v) {
     return v / v.length();
 }
 
+vec3 reflect(const vec3& v, const vec3& n) {
+    // assumes v points against n, thus the minus sign
+    return v - 2 * dot(v, n) * n;
+}
+
 // type aliases for vec3
 using point3 = vec3;  // 3D points
 using color3 = vec3;   // RGB colors
