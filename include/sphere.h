@@ -38,7 +38,7 @@ bool sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const 
 
     rec.t = root;
     rec.p = r.at(root);
-    vec3 outward_normal = (rec.p - cen) / rad;
+    vec3 outward_normal = (rec.p - cen) / rad;  // using this form so that -ve rad can give spheres with inward normals
     rec.set_face_normal(r, outward_normal);
     rec.mat_ptr = mat_ptr;
 
