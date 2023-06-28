@@ -78,9 +78,20 @@ public:
         float refraction_ratio = rec.front_face ? (1.0f / ri) : ri;
 
         vec3 unit_direction = unit_vector(r_incident.direction());
-        vec3 refracted = refract(unit_direction, rec.normal, refraction_ratio);
+        float cos_theta = fmin(dot(-unit_direction, rec.normal), 1.0f);
+        float sin_theta = sqrt(1 - cos_theta * cos_theta);
 
-        r_scattered = ray(rec.p, refracted);
+        // determine if refraction is at all possible
+        bool cannot_refract = refraction_ratio * sin_theta > 1.0f;
+        vec3 direction;
+
+        // always refract when possible
+        if(cannot_refract)
+            direction = reflect(unit_direction, rec.normal);
+        else
+            direction = refract(unit_direction, rec.normal, refraction_ratio);
+
+        r_scattered = ray(rec.p, direction);
         return true;
     }
 };
