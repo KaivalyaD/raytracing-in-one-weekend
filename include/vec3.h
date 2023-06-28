@@ -62,6 +62,12 @@ public:
     float length_squared() const {
         return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
     }
+    
+    bool near_zero() const {
+        // return true if vector is close to 0 in all dimensions
+        const auto s = 1e-8;
+        return (fabs(e[0] < s) && (fabs(e[1]) < s) && fabs(e[2] < s));
+    }
 
     inline static vec3 random() {
         return vec3(random_float(), random_float(), random_float());
