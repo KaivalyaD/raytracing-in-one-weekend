@@ -33,8 +33,24 @@ public:
         lower_left = origin - (horizontal / 2.0f) - (vertical / 2.0f) - vec3(0.0f, 0.0f, focal_length);
     }
 
-    ray get_ray(float u, float v) const {
-        return ray(origin, lower_left + u * horizontal + v * vertical - origin);
+    camera(point3 position, point3 center, vec3 up, float vfov, float aspect_ratio) {
+        auto theta = degrees_to_radians(vfov);
+        auto h = tanf(theta / 2.0f);
+        auto viewport_height = 2.0f * h;
+        auto viewport_width = aspect_ratio * viewport_height;
+
+        auto w = unit_vector(position - center);
+        auto u = unit_vector(cross(up, w));
+        auto v = cross(u, w);
+
+        origin = position;
+        horizontal = viewport_width * u;
+        vertical = viewport_height * v;
+        lower_left = origin - horizontal / 2.0f - vertical / 2.0f - w;
+    }
+
+    ray get_ray(float s, float t) const {
+        return ray(origin, lower_left + s * horizontal + t * vertical - origin);
     }
 };
 
