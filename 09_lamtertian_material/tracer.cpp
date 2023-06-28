@@ -8,18 +8,6 @@
 
 #include<iostream>
 
-vec3 random_in_unit_sphere() {
-    while(true) {
-        auto p = vec3::random(-1.0f, 1.0f);
-        if(p.length_squared() >= 1.0f) continue;
-        return p;
-    }
-}
-
-vec3 random_unit_vector() {
-    return unit_vector(random_in_unit_sphere());
-}
-
 color3 ray_color(const ray& r, const hittable_list& world, int depth) {
     hit_record rec;
 
