@@ -70,6 +70,13 @@ class dielectric: public material {
 private:
     float ri;
 
+    static float reflectance(float cosine, float ri) {
+        // use schlick's approximation for reflectance
+        auto r0 = (1.0f - ri) / (1.0f + ri);
+        r0 = r0 * r0;
+        return r0 + (1.0f - r0) * powf((1.0f - cosine), 5.0f);
+    }
+
 public:
     dielectric(float absolute_refractive_index) : ri(absolute_refractive_index) {}
 
@@ -85,8 +92,8 @@ public:
         bool cannot_refract = refraction_ratio * sin_theta > 1.0f;
         vec3 direction;
 
-        // always refract when possible
-        if(cannot_refract)
+        // refract sometimes (and when possible), otherwise reflect
+        if(cannot_refract || reflectance(cos_theta, refraction_ratio) > random_float())
             direction = reflect(unit_direction, rec.normal);
         else
             direction = refract(unit_direction, rec.normal, refraction_ratio);
